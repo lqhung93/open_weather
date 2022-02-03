@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="text_default">16sp</dimen>
+
+    <dimen name="padding_default">16dp</dimen>
+    <dimen name="padding_default_double">32dp</dimen>
+    <dimen name="padding_default_double_half">48dp</dimen>
+    <dimen name="padding_default_double_double">64dp</dimen>
+    <dimen name="padding_default_half">8dp</dimen>
+    <dimen name="padding_default_small">4dp</dimen>
+
+</resources>
