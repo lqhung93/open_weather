@@ -4,6 +4,10 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def appIdPropertiesFile = rootProject.file("app-id.properties")
+def appIdProperties = new Properties()
+appIdProperties.load(new FileInputStream(appIdPropertiesFile))
+
 android {
     compileSdk 31
 
@@ -18,9 +22,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "APP_ID", appIdProperties['APP_ID'])
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "APP_ID", appIdProperties['APP_ID'])
         }
     }
     compileOptions {

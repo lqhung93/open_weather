@@ -2,6 +2,7 @@ package com.hung.openweather
 
 import android.app.Application
 import com.hung.openweather.api.ApiManager
+import com.hung.openweather.utils.Utils
 
 class App : Application() {
 
@@ -35,6 +36,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        Utils.storeAppId(BuildConfig.APP_ID)
     }
 
 }

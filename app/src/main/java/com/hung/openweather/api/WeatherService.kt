@@ -9,7 +9,7 @@ interface WeatherService {
 
     @GET("forecast/daily")
     fun getDailyForecast(
-        @Query("appid") appid: String,
+        @Query("appid") appid: String? = null,
         @Query("q") q: String? = null,
         @Query("cnt") cnt: String? = null,
         @Query("units") units: String? = null,
