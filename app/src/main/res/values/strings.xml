@@ -2,9 +2,9 @@
     <string name="app_name">Weather Forecast</string>
     <string name="place">Place</string>
     <string name="get_weather">Get Weather</string>
-    <string name="date">Date</string>
-    <string name="average_temperature">Average temperature</string>
-    <string name="pressure">Pressure</string>
-    <string name="humidity">Humidity</string>
-    <string name="description">Description</string>
+    <string name="date">Date: %1$s</string>
+    <string name="average_temperature">Average temperature: %1$s</string>
+    <string name="pressure">Pressure: %1$s</string>
+    <string name="humidity">Humidity: %1$s</string>
+    <string name="description">Description: %1$s</string>
 </resources>
