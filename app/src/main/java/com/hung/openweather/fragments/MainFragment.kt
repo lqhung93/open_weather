@@ -12,7 +12,6 @@ import com.hung.openweather.databinding.FragmentMainBinding
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.viewmodels.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 
