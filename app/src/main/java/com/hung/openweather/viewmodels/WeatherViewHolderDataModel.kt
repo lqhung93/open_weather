@@ -4,7 +4,6 @@ import com.hung.openweather.App
 import com.hung.openweather.R
 import com.hung.openweather.models.WeatherData
 import com.hung.openweather.utils.DateUtils
-import com.hung.openweather.utils.Utils
 import kotlin.math.roundToInt
 
 class WeatherViewHolderDataModel {

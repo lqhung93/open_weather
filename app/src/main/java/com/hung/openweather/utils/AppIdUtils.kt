@@ -3,7 +3,7 @@ package com.hung.openweather.utils
 import android.text.TextUtils
 import com.hung.openweather.App
 
-class Utils {
+class AppIdUtils {
 
     companion object {
 
