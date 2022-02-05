@@ -30,7 +30,7 @@ class SharedPreferencesManager private constructor(private val context: Context)
         }
     }
 
-    fun getString(settingsKey: String, key: String, defaultValue: String?): String? {
+    fun getString(settingsKey: String, key: String, defaultValue: String? = null): String? {
         readLock.lock()
         return try {
             if (context == null) {
