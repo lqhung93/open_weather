@@ -16,7 +16,7 @@ import com.hung.openweather.databinding.FragmentMainBinding
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.viewmodels.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
 class MainFragment : BaseFragment() {
@@ -52,11 +52,15 @@ class MainFragment : BaseFragment() {
             mainViewModel.getDailyForecast(binding.etPlace.text.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<WeatherResponse>() {
-                    override fun onSuccess(t: WeatherResponse) {
+                .subscribeWith(object : DisposableObserver<WeatherResponse>() {
+
+                    override fun onNext(t: WeatherResponse) {
                         t.list?.let {
                             adapter.setData(it)
                         }
+                    }
+
+                    override fun onComplete() {
 
                     }
 
