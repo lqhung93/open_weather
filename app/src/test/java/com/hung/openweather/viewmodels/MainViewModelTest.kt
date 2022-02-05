@@ -1,7 +1,10 @@
 package com.hung.openweather.viewmodels
 
+import com.google.gson.Gson
+import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.repository.MainRepository
-import com.hung.openweather.utils.mock
+import com.hung.openweather.utils.TestUtils
+import io.reactivex.Observable
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -21,13 +24,19 @@ class MainViewModelTest {
 
     @Test
     fun testGetDailyForecast() {
-        Mockito.`when`(mainRepository.getDailyForecast("saigon")).thenReturn(mock())
+        val failure = TestUtils.getJsonFromResource(this, "weather_response_success.json")
+        val response = Gson().fromJson(failure, WeatherResponse::class.java)
+
+        Mockito.`when`(mainRepository.getDailyForecast("saigon")).thenReturn(Observable.just(response))
         Mockito.verifyNoMoreInteractions(mainRepository)
 
         mainViewModel.getDailyForecast("saigon")
         Mockito.verify(mainRepository).getDailyForecast("saigon")
 
         Mockito.reset(mainRepository)
+
+        Mockito.`when`(mainRepository.getDailyForecast("")).thenReturn(Observable.just(response))
+        Mockito.verifyNoMoreInteractions(mainRepository)
 
         mainViewModel.getDailyForecast("")
         Mockito.verify(mainRepository).getDailyForecast("")
