@@ -1,6 +1,7 @@
 package com.hung.openweather.fragments
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,11 @@ class MainFragment : BaseFragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
+    private var recyclerViewState: Parcelable? = null
+
     companion object {
         private const val MIN_SEARCH_CHARACTER = 3
+        private const val RECYCLER_VIEW_STATE = "RECYCLER_VIEW_STATE"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +81,19 @@ class MainFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
+        binding.rvWeatherForecast.layoutManager?.onRestoreInstanceState(recyclerViewState)
         enableGetWeatherButton(binding.etPlace)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        recyclerViewState = savedInstanceState?.getParcelable(RECYCLER_VIEW_STATE)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        recyclerViewState = binding.rvWeatherForecast.layoutManager?.onSaveInstanceState()
+        outState.putParcelable(RECYCLER_VIEW_STATE, recyclerViewState)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroyView() {
