@@ -2,11 +2,17 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-allopen'
 }
 
 def appIdPropertiesFile = rootProject.file("app-id.properties")
 def appIdProperties = new Properties()
 appIdProperties.load(new FileInputStream(appIdPropertiesFile))
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.hung.openweather.utils.testing.OpenClass'
+}
 
 android {
     compileSdk 31
