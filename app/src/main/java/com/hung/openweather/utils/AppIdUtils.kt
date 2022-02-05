@@ -1,5 +1,6 @@
 package com.hung.openweather.utils
 
+import android.content.Context
 import android.text.TextUtils
 import com.hung.openweather.App
 
@@ -7,12 +8,10 @@ class AppIdUtils {
 
     companion object {
 
-        private val context = App.instance
-
         @Volatile
         private var _appId: String? = null
 
-        fun storeAppId(appId: String) {
+        fun storeAppId(appId: String, context: Context) {
             if (!TextUtils.isEmpty(appId)) {
                 _appId = appId
             }
@@ -24,7 +23,7 @@ class AppIdUtils {
             )
         }
 
-        fun getAppId(): String? {
+        fun getAppId(context: Context): String? {
             if (!TextUtils.isEmpty(_appId)) {
                 return _appId
             }

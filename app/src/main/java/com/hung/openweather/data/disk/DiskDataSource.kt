@@ -1,7 +1,7 @@
 package com.hung.openweather.data.disk
 
+import android.content.Context
 import com.google.gson.Gson
-import com.hung.openweather.App
 import com.hung.openweather.data.DataSource
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.utils.Constants
@@ -11,7 +11,9 @@ import com.hung.openweather.utils.testing.OpenForTesting
 import io.reactivex.Observable
 
 @OpenForTesting
-class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSource {
+class DiskDataSource(private val context: Context) : DataSource {
+
+    private val preferences = SharedPreferencesManager.getInstance(context)
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =
         Observable.create { emitter ->
@@ -23,7 +25,7 @@ class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSo
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            if (!DateUtils.needToRefreshDataFromApi(App.instance) && weatherResponse != null) {
+            if (!DateUtils.needToRefreshDataFromApi(context) && weatherResponse != null) {
                 emitter.onNext(weatherResponse)
             }
             emitter.onComplete()

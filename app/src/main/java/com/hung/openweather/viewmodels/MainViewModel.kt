@@ -77,9 +77,9 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     companion object {
 
         fun builder(context: Context): ViewModelProvider.Factory {
-            val memoryDataSource = MemoryDataSource()
-            val diskDataSource = DiskDataSource(SharedPreferencesManager.getInstance(context))
-            val networkDataSource = NetworkDataSource()
+            val memoryDataSource = MemoryDataSource(context)
+            val diskDataSource = DiskDataSource(context)
+            val networkDataSource = NetworkDataSource(context)
 
             val repository = MainRepository(memoryDataSource, diskDataSource, networkDataSource)
             return MainViewModelFactory(repository)

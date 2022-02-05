@@ -1,5 +1,6 @@
 package com.hung.openweather.data.memory
 
+import android.content.Context
 import com.hung.openweather.App
 import com.hung.openweather.data.DataSource
 import com.hung.openweather.models.WeatherResponse
@@ -8,14 +9,14 @@ import com.hung.openweather.utils.testing.OpenForTesting
 import io.reactivex.Observable
 
 @OpenForTesting
-class MemoryDataSource : DataSource {
+class MemoryDataSource(private val context: Context) : DataSource {
 
     private var data: WeatherResponse? = null
     private var query: String? = null
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =
         Observable.create { emitter ->
-            if (!DateUtils.needToRefreshDataFromApi(App.instance) && query.equals(this.query, true) && data != null) {
+            if (!DateUtils.needToRefreshDataFromApi(context) && query.equals(this.query, true) && data != null) {
                 emitter.onNext(data!!)
             }
             emitter.onComplete()
