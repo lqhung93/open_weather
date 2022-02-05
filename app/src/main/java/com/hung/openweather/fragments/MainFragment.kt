@@ -53,6 +53,7 @@ class MainFragment : BaseFragment() {
         binding.rvWeatherForecast.adapter = adapter
 
         binding.btnGetWeather.setOnClickListener {
+            hideKeyboard()
             mainViewModel.getDailyForecast(binding.etPlace.text.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
