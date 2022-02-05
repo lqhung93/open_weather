@@ -8,4 +8,5 @@
     <string name="humidity">Humidity: %1$d%%</string>
     <string name="description">Description: %1$s</string>
     <string name="loading">Loading...</string>
+    <string name="empty_result">Empty Result</string>
 </resources>

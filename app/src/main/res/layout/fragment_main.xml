@@ -25,16 +25,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_place" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_weather_forecast"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_get_weather"
-            tools:listitem="@layout/list_item_weather" />
+            app:layout_constraintTop_toBottomOf="@id/btn_get_weather">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_weather_forecast"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_weather" />
+
+            <include
+                android:id="@+id/layout_empty_result"
+                layout="@layout/layout_empty_result"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

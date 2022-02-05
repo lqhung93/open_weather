@@ -64,8 +64,11 @@ class MainFragment : BaseFragment() {
                 .subscribeWith(object : DisposableObserver<WeatherResponse>() {
 
                     override fun onNext(t: WeatherResponse) {
-                        t.list?.let {
-                            adapter.setData(it)
+                        if (t.list?.isNotEmpty() == true) {
+                            binding.layoutEmptyResult.visibility = View.GONE
+                            adapter.setData(t.list!!)
+                        } else {
+                            binding.layoutEmptyResult.visibility = View.VISIBLE
                         }
                     }
 
@@ -75,7 +78,9 @@ class MainFragment : BaseFragment() {
 
                     override fun onError(e: Throwable) {
                         showLoadingView(false)
-                        Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG).show()
+                        binding.layoutEmptyResult.visibility = View.VISIBLE
+                        Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG)
+                            .show()
                     }
                 })
         }
