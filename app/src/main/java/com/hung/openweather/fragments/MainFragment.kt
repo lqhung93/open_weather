@@ -1,5 +1,6 @@
 package com.hung.openweather.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ class MainFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private var recyclerViewState: Parcelable? = null
+    private var progressDialog: AlertDialog? = null
 
     companion object {
         private const val MIN_SEARCH_CHARACTER = 3
@@ -55,6 +57,7 @@ class MainFragment : BaseFragment() {
 
         binding.btnGetWeather.setOnClickListener {
             hideKeyboard()
+            showLoadingView(true)
             mainViewModel.getDailyForecast(binding.etPlace.text.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -67,10 +70,11 @@ class MainFragment : BaseFragment() {
                     }
 
                     override fun onComplete() {
-
+                        showLoadingView(false)
                     }
 
                     override fun onError(e: Throwable) {
+                        showLoadingView(false)
                         Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG).show()
                     }
                 })
@@ -79,6 +83,8 @@ class MainFragment : BaseFragment() {
         binding.etPlace.addTextChangedListener {
             enableGetWeatherButton(binding.etPlace)
         }
+
+        initLoadingView()
     }
 
     override fun onResume() {
@@ -112,5 +118,20 @@ class MainFragment : BaseFragment() {
         }
 
         binding.btnGetWeather.isEnabled = enabled
+    }
+
+    private fun initLoadingView() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setCancelable(false)
+        builder.setView(R.layout.layout_loading_dialog)
+        progressDialog = builder.create()
+    }
+
+    private fun showLoadingView(show: Boolean) {
+        if (show) {
+            progressDialog?.show()
+        } else {
+            progressDialog?.dismiss()
+        }
     }
 }
