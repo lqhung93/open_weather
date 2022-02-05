@@ -9,8 +9,8 @@ import io.reactivex.Single
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
-    fun getDailyForecast(): Single<WeatherResponse> {
-        return repository.getDailyForecast()
+    fun getDailyForecast(query: String): Single<WeatherResponse> {
+        return repository.getDailyForecast(query)
     }
 
     companion object {
