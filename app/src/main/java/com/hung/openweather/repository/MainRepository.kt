@@ -7,10 +7,10 @@ import io.reactivex.Single
 
 class MainRepository {
 
-    fun getDailyForecast(): Single<WeatherResponse> {
+    fun getDailyForecast(query: String): Single<WeatherResponse> {
         return App.getApiManger().weatherService.getDailyForecast(
             Utils.getAppId(),
-            "saigon",
+            query,
             "7",
             "metric"
         )
