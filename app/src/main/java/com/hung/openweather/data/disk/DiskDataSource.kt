@@ -7,8 +7,10 @@ import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.utils.Constants
 import com.hung.openweather.utils.DateUtils
 import com.hung.openweather.utils.SharedPreferencesManager
+import com.hung.openweather.utils.testing.OpenForTesting
 import io.reactivex.Observable
 
+@OpenForTesting
 class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSource {
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =

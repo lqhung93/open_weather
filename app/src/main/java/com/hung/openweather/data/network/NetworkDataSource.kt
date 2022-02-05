@@ -5,8 +5,10 @@ import com.hung.openweather.data.DataSource
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.utils.DateUtils
 import com.hung.openweather.utils.AppIdUtils
+import com.hung.openweather.utils.testing.OpenForTesting
 import io.reactivex.Observable
 
+@OpenForTesting
 class NetworkDataSource : DataSource {
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =
