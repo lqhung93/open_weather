@@ -18,10 +18,9 @@ import javax.crypto.CipherOutputStream
 import javax.crypto.spec.SecretKeySpec
 import javax.security.auth.x500.X500Principal
 
-class EncryptionUtils private constructor(appContext: Context) {
+class EncryptionUtils private constructor(private val context: Context) {
 
     private var keyStore: KeyStore? = null
-    private var context: Context = appContext
 
     init {
         initialiseKeys()
@@ -157,9 +156,9 @@ class EncryptionUtils private constructor(appContext: Context) {
         private const val SHARED_PREFERENCE_NAME = "open_weather"
 
         private var encryptionUtil: EncryptionUtils? = null
-        fun getInstance(appContext: Context): EncryptionUtils {
+        fun getInstance(context: Context): EncryptionUtils {
             if (encryptionUtil == null) {
-                encryptionUtil = EncryptionUtils(appContext)
+                encryptionUtil = EncryptionUtils(context)
             }
             return encryptionUtil!!
         }
