@@ -8,7 +8,11 @@ class Constants {
     }
 
     object WeatherDataId {
-        const val WEATHER_DATA_ID_SHARED_PREFERENCES = "encrypted_app_id_shared_preferences"
-        const val QUERY_KEY = "query_key"
+        const val WEATHER_DATA_ID_SHARED_PREFERENCES = "weather_data_id_shared_preferences"
+    }
+
+    object TimeId {
+        const val TIME_ID_SHARED_PREFERENCES = "time_id_shared_preferences"
+        const val TIME_ID = "time_id"
     }
 }

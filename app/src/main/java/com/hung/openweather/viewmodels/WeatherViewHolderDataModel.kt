@@ -3,6 +3,7 @@ package com.hung.openweather.viewmodels
 import com.hung.openweather.App
 import com.hung.openweather.R
 import com.hung.openweather.models.WeatherData
+import com.hung.openweather.utils.DateUtils
 import com.hung.openweather.utils.Utils
 import kotlin.math.roundToInt
 
@@ -16,7 +17,7 @@ class WeatherViewHolderDataModel {
 
     constructor(data: WeatherData) {
         val resource = App.instance
-        date = resource.getString(R.string.date, Utils.convertSecondsToDateString(data.dt ?: 0))
+        date = resource.getString(R.string.date, DateUtils.convertSecondsToDateString(data.dt ?: 0))
         avgTemp = resource.getString(R.string.average_temperature, averageTemp(data))
         pressure = resource.getString(R.string.pressure, data.pressure)
         humidity = resource.getString(R.string.humidity, data.humidity)

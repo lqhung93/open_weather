@@ -2,8 +2,6 @@ package com.hung.openweather.utils
 
 import android.text.TextUtils
 import com.hung.openweather.App
-import java.text.SimpleDateFormat
-import java.util.*
 
 class Utils {
 
@@ -13,11 +11,6 @@ class Utils {
 
         @Volatile
         private var _appId: String? = null
-
-        fun convertSecondsToDateString(seconds: Int): String {
-            val sdf = SimpleDateFormat("EEE, dd MMM yyyy")
-            return sdf.format(Date(seconds * 1000L))
-        }
 
         fun storeAppId(appId: String) {
             if (!TextUtils.isEmpty(appId)) {

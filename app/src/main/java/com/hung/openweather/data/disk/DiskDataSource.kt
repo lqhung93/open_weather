@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.hung.openweather.data.DataSource
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.utils.Constants
+import com.hung.openweather.utils.DateUtils
 import com.hung.openweather.utils.SharedPreferencesManager
 import io.reactivex.Observable
 
@@ -19,7 +20,7 @@ class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSo
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            if (weatherResponse != null) {
+            if (!DateUtils.needToRefreshDataFromApi() && weatherResponse != null) {
                 emitter.onNext(weatherResponse)
             }
             emitter.onComplete()
