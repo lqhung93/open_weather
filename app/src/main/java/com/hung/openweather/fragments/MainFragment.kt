@@ -58,31 +58,33 @@ class MainFragment : BaseFragment() {
         binding.btnGetWeather.setOnClickListener {
             hideKeyboard()
             showLoadingView(true)
-            mainViewModel.getDailyForecast(binding.etPlace.text.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<WeatherResponse>() {
 
-                    override fun onNext(t: WeatherResponse) {
-                        if (t.list?.isNotEmpty() == true) {
-                            binding.layoutEmptyResult.visibility = View.GONE
-                            adapter.setData(t.list!!)
-                        } else {
-                            binding.layoutEmptyResult.visibility = View.VISIBLE
+            disposable.add(
+                mainViewModel.getDailyForecast(binding.etPlace.text.toString())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableObserver<WeatherResponse>() {
+
+                        override fun onNext(t: WeatherResponse) {
+                            if (t.list?.isNotEmpty() == true) {
+                                binding.layoutEmptyResult.visibility = View.GONE
+                                adapter.setData(t.list!!)
+                            } else {
+                                binding.layoutEmptyResult.visibility = View.VISIBLE
+                            }
                         }
-                    }
 
-                    override fun onComplete() {
-                        showLoadingView(false)
-                    }
+                        override fun onComplete() {
+                            showLoadingView(false)
+                        }
 
-                    override fun onError(e: Throwable) {
-                        showLoadingView(false)
-                        binding.layoutEmptyResult.visibility = View.VISIBLE
-                        Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG)
-                            .show()
-                    }
-                })
+                        override fun onError(e: Throwable) {
+                            showLoadingView(false)
+                            binding.layoutEmptyResult.visibility = View.VISIBLE
+                            Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG).show()
+                        }
+                    })
+            )
         }
 
         binding.etPlace.addTextChangedListener {
@@ -111,6 +113,7 @@ class MainFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        showLoadingView(false)
         _binding = null
     }
 
