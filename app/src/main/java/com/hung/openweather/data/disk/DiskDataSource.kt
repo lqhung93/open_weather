@@ -11,7 +11,8 @@ class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSo
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =
         Observable.create { emitter ->
-            val data = preferences.getString(Constants.WeatherDataId.WEATHER_DATA_ID_SHARED_PREFERENCES, query)
+            val encryptedQuery = preferences.encryptionUtils.encrypt(query)
+            val data = preferences.getString(Constants.WeatherDataId.WEATHER_DATA_ID_SHARED_PREFERENCES, encryptedQuery)
             var weatherResponse: WeatherResponse? = null
             try {
                 weatherResponse = Gson().fromJson(data, WeatherResponse::class.java)
@@ -26,7 +27,8 @@ class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSo
 
     fun saveData(query: String, data: WeatherResponse?) {
         if (data != null) {
-            preferences.change(Constants.WeatherDataId.WEATHER_DATA_ID_SHARED_PREFERENCES, query, Gson().toJson(data))
+            val encryptedQuery = preferences.encryptionUtils.encrypt(query)
+            preferences.change(Constants.WeatherDataId.WEATHER_DATA_ID_SHARED_PREFERENCES, encryptedQuery, Gson().toJson(data))
         }
     }
 }

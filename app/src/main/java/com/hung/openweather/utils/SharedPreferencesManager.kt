@@ -11,7 +11,7 @@ class SharedPreferencesManager private constructor(private val context: Context)
     private val readLock: Lock = readWriteLock.readLock()
     private val writeLock: Lock = readWriteLock.writeLock()
 
-    private val encryptionUtils = EncryptionUtils.getInstance(context)
+    val encryptionUtils = EncryptionUtils.getInstance(context)
 
     fun change(settingsKey: String, key: String, value: String?) {
         writeLock.lock()
