@@ -5,8 +5,10 @@ import com.hung.openweather.data.disk.DiskDataSource
 import com.hung.openweather.data.memory.MemoryDataSource
 import com.hung.openweather.data.network.NetworkDataSource
 import com.hung.openweather.models.WeatherResponse
+import com.hung.openweather.utils.testing.OpenForTesting
 import io.reactivex.Observable
 
+@OpenForTesting
 class MainRepository(
     private val memoryDataSource: MemoryDataSource,
     private val diskDataSource: DiskDataSource,
