@@ -1,12 +1,13 @@
 package com.hung.openweather.viewmodels
 
+import androidx.lifecycle.ViewModel
 import com.hung.openweather.App
 import com.hung.openweather.R
 import com.hung.openweather.models.WeatherData
 import com.hung.openweather.utils.DateUtils
 import kotlin.math.roundToInt
 
-class WeatherViewHolderDataModel {
+class WeatherViewHolderViewModel : ViewModel {
 
     val date: String
     val avgTemp: String
@@ -14,7 +15,7 @@ class WeatherViewHolderDataModel {
     val humidity: String
     val description: String
 
-    constructor(data: WeatherData) {
+    constructor(data: WeatherData) : super() {
         val resource = App.instance
         date = resource.getString(R.string.date, DateUtils.convertSecondsToDateString(data.dt ?: 0))
         avgTemp = resource.getString(R.string.average_temperature, averageTemp(data))

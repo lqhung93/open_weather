@@ -15,4 +15,10 @@ class Constants {
         const val TIME_ID_SHARED_PREFERENCES = "time_id_shared_preferences"
         const val TIME_ID = "time_id"
     }
+
+    object ApiState {
+        const val STARTED = "STARTED"
+        const val COMPLETED = "COMPLETED"
+        const val ERROR = "ERROR"
+    }
 }

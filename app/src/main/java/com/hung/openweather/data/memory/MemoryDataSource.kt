@@ -12,7 +12,7 @@ class MemoryDataSource : DataSource {
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =
         Observable.create { emitter ->
-            if (!DateUtils.needToRefreshDataFromApi() && query == this.query && data != null) {
+            if (!DateUtils.needToRefreshDataFromApi() && query.equals(this.query, true) && data != null) {
                 emitter.onNext(data!!)
             }
             emitter.onComplete()
