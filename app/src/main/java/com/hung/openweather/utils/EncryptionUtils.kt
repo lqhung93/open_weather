@@ -18,10 +18,9 @@ import javax.crypto.CipherOutputStream
 import javax.crypto.spec.SecretKeySpec
 import javax.security.auth.x500.X500Principal
 
-class EncryptionUtils private constructor(appContext: Context) {
+class EncryptionUtils private constructor(private val context: Context) {
 
     private var keyStore: KeyStore? = null
-    private var context: Context = appContext
 
     init {
         initialiseKeys()
@@ -47,7 +46,7 @@ class EncryptionUtils private constructor(appContext: Context) {
                 kpg.initialize(spec)
                 kpg.generateKeyPair()
             }
-            val pref: SharedPreferences = context.getSharedPreferences(Utils.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+            val pref: SharedPreferences = context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
             var encryptedKeyB64 = pref.getString(TOKEN_AES, null)
             if (encryptedKeyB64 == null) {
                 val key = ByteArray(16)
@@ -66,7 +65,7 @@ class EncryptionUtils private constructor(appContext: Context) {
 
     @Throws(Exception::class)
     private fun getSecretKey(context: Context): Key {
-        val pref = context.getSharedPreferences(Utils.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val pref = context.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)
         var encryptedKeyB64 = pref.getString(TOKEN_AES, null)
         if (encryptedKeyB64 == null || encryptedKeyB64.isEmpty()) {
             initialiseKeys()
@@ -154,11 +153,12 @@ class EncryptionUtils private constructor(appContext: Context) {
         private const val KEY_ALIAS = "OPENWEATHERKEY"
         private const val RSA_MODE = "RSA/ECB/PKCS1Padding"
         private const val AES_MODE = "AES/ECB/PKCS5Padding"
+        private const val SHARED_PREFERENCE_NAME = "open_weather"
 
         private var encryptionUtil: EncryptionUtils? = null
-        fun getInstance(appContext: Context): EncryptionUtils {
+        fun getInstance(context: Context): EncryptionUtils {
             if (encryptionUtil == null) {
-                encryptionUtil = EncryptionUtils(appContext)
+                encryptionUtil = EncryptionUtils(context)
             }
             return encryptionUtil!!
         }

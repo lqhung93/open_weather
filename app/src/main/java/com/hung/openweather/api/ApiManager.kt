@@ -1,7 +1,6 @@
 package com.hung.openweather.api
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import com.hung.openweather.BuildConfig
 import okhttp3.Cache
 import okhttp3.HttpUrl

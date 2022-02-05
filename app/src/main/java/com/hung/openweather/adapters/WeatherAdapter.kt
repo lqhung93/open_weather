@@ -1,17 +1,13 @@
 package com.hung.openweather.adapters
 
-import android.util.Log
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.hung.openweather.viewholders.WeatherViewHolder
-
-import androidx.databinding.DataBindingUtil
-
 import android.view.LayoutInflater
-import com.google.gson.Gson
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.hung.openweather.R
 import com.hung.openweather.databinding.ListItemWeatherBinding
 import com.hung.openweather.models.WeatherData
+import com.hung.openweather.viewholders.WeatherViewHolder
 
 class WeatherAdapter : RecyclerView.Adapter<WeatherViewHolder>() {
 
