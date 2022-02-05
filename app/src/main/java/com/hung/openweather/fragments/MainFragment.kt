@@ -86,8 +86,9 @@ class MainFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        mainViewModel.disposable.clear()
         showLoadingView(false)
+        super.onDestroyView()
         _binding = null
     }
 

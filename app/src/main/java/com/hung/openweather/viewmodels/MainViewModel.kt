@@ -27,7 +27,7 @@ import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
-    private val disposable = CompositeDisposable()
+    val disposable = CompositeDisposable()
 
     val isButtonEnabled = MutableLiveData<Boolean>()
     val weatherData = MutableLiveData<List<WeatherData>>().apply {
