@@ -1,6 +1,7 @@
 package com.hung.openweather.data.disk
 
 import com.google.gson.Gson
+import com.hung.openweather.App
 import com.hung.openweather.data.DataSource
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.utils.Constants
@@ -20,7 +21,7 @@ class DiskDataSource(private val preferences: SharedPreferencesManager) : DataSo
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            if (!DateUtils.needToRefreshDataFromApi() && weatherResponse != null) {
+            if (!DateUtils.needToRefreshDataFromApi(App.instance) && weatherResponse != null) {
                 emitter.onNext(weatherResponse)
             }
             emitter.onComplete()

@@ -1,5 +1,6 @@
 package com.hung.openweather.data.memory
 
+import com.hung.openweather.App
 import com.hung.openweather.data.DataSource
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.utils.DateUtils
@@ -12,7 +13,7 @@ class MemoryDataSource : DataSource {
 
     override fun getDailyForecast(query: String): Observable<WeatherResponse> =
         Observable.create { emitter ->
-            if (!DateUtils.needToRefreshDataFromApi() && query.equals(this.query, true) && data != null) {
+            if (!DateUtils.needToRefreshDataFromApi(App.instance) && query.equals(this.query, true) && data != null) {
                 emitter.onNext(data!!)
             }
             emitter.onComplete()

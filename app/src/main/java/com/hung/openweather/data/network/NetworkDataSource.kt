@@ -13,7 +13,7 @@ class NetworkDataSource : DataSource {
         App.getApiManger().weatherService
             .getDailyForecast(AppIdUtils.getAppId(), query, "7", "metric")
             .doOnNext {
-                DateUtils.saveCurrentTime()
+                DateUtils.saveCurrentTime(App.instance)
             }
 
 }
