@@ -1,6 +1,5 @@
 package com.hung.openweather.models
 
-
 import com.google.gson.annotations.SerializedName
 
 data class Temp(
