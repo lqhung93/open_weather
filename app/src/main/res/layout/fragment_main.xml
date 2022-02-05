@@ -3,8 +3,10 @@
 
     <data>
         <variable
-            name="dataModel"
-            type="com.hung.openweather.viewmodels.MainFragmentDataModel" />
+            name="viewModel"
+            type="com.hung.openweather.viewmodels.MainViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,8 +20,8 @@
             android:id="@+id/et_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:afterTextChanged="@{(text) -> viewModel.onQueryTextChanged(text)}"
             android:hint="@string/place"
-            android:afterTextChanged="@{(text) -> dataModel.onQueryTextChanged(text)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +29,8 @@
             android:id="@+id/btn_get_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            bind:enableButton="@{dataModel.isButtonEnabled}"
+            bind:enableButton="@{viewModel.isButtonEnabled}"
+            android:onClick="@{(view) -> viewModel.onGetWeather(view)}"
             android:text="@string/get_weather"
             android:textAllCaps="false"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,13 +48,16 @@
                 android:id="@+id/rv_weather_forecast"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                bind:data="@{viewModel.weatherData}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/list_item_weather" />
 
             <include
                 android:id="@+id/layout_empty_result"
                 layout="@layout/layout_empty_result"
-                android:visibility="gone" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.weatherData.size() > 0 ? View.GONE : View.VISIBLE}" />
 
         </FrameLayout>
 

@@ -7,18 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.hung.openweather.R
 import com.hung.openweather.adapters.WeatherAdapter
 import com.hung.openweather.base.BaseFragment
 import com.hung.openweather.databinding.FragmentMainBinding
-import com.hung.openweather.models.WeatherResponse
-import com.hung.openweather.viewmodels.MainFragmentDataModel
+import com.hung.openweather.utils.Constants
 import com.hung.openweather.viewmodels.MainViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.schedulers.Schedulers
 
 class MainFragment : BaseFragment() {
 
@@ -42,7 +39,7 @@ class MainFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
-            dataModel = MainFragmentDataModel()
+            viewModel = mainViewModel
         }
         return binding.root
     }
@@ -50,44 +47,26 @@ class MainFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = WeatherAdapter()
+        initLoadingView()
 
         binding.rvWeatherForecast.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        binding.rvWeatherForecast.adapter = adapter
+        binding.rvWeatherForecast.adapter = WeatherAdapter()
 
-        binding.btnGetWeather.setOnClickListener {
-            hideKeyboard()
-            showLoadingView(true)
-
-            disposable.add(
-                mainViewModel.getDailyForecast(binding.etPlace.text.toString())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableObserver<WeatherResponse>() {
-
-                        override fun onNext(t: WeatherResponse) {
-                            if (t.list?.isNotEmpty() == true) {
-                                binding.layoutEmptyResult.visibility = View.GONE
-                                adapter.setData(t.list!!)
-                            } else {
-                                binding.layoutEmptyResult.visibility = View.VISIBLE
-                            }
-                        }
-
-                        override fun onComplete() {
-                            showLoadingView(false)
-                        }
-
-                        override fun onError(e: Throwable) {
-                            showLoadingView(false)
-                            binding.layoutEmptyResult.visibility = View.VISIBLE
-                            Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_LONG).show()
-                        }
-                    })
-            )
-        }
-
-        initLoadingView()
+        mainViewModel.onGetWeatherState.observe(viewLifecycleOwner, Observer {
+            when (it.first) {
+                Constants.ApiState.STARTED -> {
+                    hideKeyboard()
+                    showLoadingView(true)
+                }
+                Constants.ApiState.COMPLETED -> {
+                    showLoadingView(false)
+                }
+                Constants.ApiState.ERROR -> {
+                    showLoadingView(false)
+                    Toast.makeText(requireContext(), it.second.toString(), Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     override fun onResume() {
