@@ -6,10 +6,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.hung.openweather.R
@@ -17,6 +14,7 @@ import com.hung.openweather.adapters.WeatherAdapter
 import com.hung.openweather.base.BaseFragment
 import com.hung.openweather.databinding.FragmentMainBinding
 import com.hung.openweather.models.WeatherResponse
+import com.hung.openweather.viewmodels.MainFragmentDataModel
 import com.hung.openweather.viewmodels.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
@@ -33,7 +31,6 @@ class MainFragment : BaseFragment() {
     private var progressDialog: AlertDialog? = null
 
     companion object {
-        private const val MIN_SEARCH_CHARACTER = 3
         private const val RECYCLER_VIEW_STATE = "RECYCLER_VIEW_STATE"
     }
 
@@ -43,7 +40,10 @@ class MainFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            dataModel = MainFragmentDataModel()
+        }
         return binding.root
     }
 
@@ -87,17 +87,12 @@ class MainFragment : BaseFragment() {
             )
         }
 
-        binding.etPlace.addTextChangedListener {
-            enableGetWeatherButton(binding.etPlace)
-        }
-
         initLoadingView()
     }
 
     override fun onResume() {
         super.onResume()
         binding.rvWeatherForecast.layoutManager?.onRestoreInstanceState(recyclerViewState)
-        enableGetWeatherButton(binding.etPlace)
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -115,17 +110,6 @@ class MainFragment : BaseFragment() {
         super.onDestroyView()
         showLoadingView(false)
         _binding = null
-    }
-
-    private fun enableGetWeatherButton(view: EditText) {
-        val enabled = !view.text.isNullOrEmpty() && view.text.length >= MIN_SEARCH_CHARACTER
-        if (enabled) {
-            binding.btnGetWeather.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
-        } else {
-            binding.btnGetWeather.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
-        }
-
-        binding.btnGetWeather.isEnabled = enabled
     }
 
     private fun initLoadingView() {
