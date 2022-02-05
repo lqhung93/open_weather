@@ -35,13 +35,16 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     }
     val onGetWeatherState = MutableLiveData<Pair<String, String?>>()
 
+    private var editTextValue: String = ""
+
     fun onQueryTextChanged(text: Editable?) {
+        editTextValue = text.toString()
         isButtonEnabled.postValue(!text.isNullOrEmpty() && text.length >= MIN_SEARCH_CHARACTER)
     }
 
     fun onGetWeather(view: View) {
         disposable.add(
-            repository.getDailyForecast("saigon")
+            repository.getDailyForecast(editTextValue)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<WeatherResponse>() {
