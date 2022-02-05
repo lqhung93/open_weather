@@ -4,8 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.hung.openweather.R
 import com.hung.openweather.adapters.WeatherAdapter
 import com.hung.openweather.base.BaseFragment
 import com.hung.openweather.databinding.FragmentMainBinding
@@ -21,6 +25,10 @@ class MainFragment : BaseFragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
+
+    companion object {
+        private const val MIN_SEARCH_CHARACTER = 3
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +49,7 @@ class MainFragment : BaseFragment() {
         binding.rvWeatherForecast.adapter = adapter
 
         binding.btnGetWeather.setOnClickListener {
-            mainViewModel.getDailyForecast()
+            mainViewModel.getDailyForecast(binding.etPlace.text.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<WeatherResponse>() {
@@ -57,10 +65,30 @@ class MainFragment : BaseFragment() {
                     }
                 })
         }
+
+        binding.etPlace.addTextChangedListener {
+            enableGetWeatherButton(binding.etPlace)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        enableGetWeatherButton(binding.etPlace)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun enableGetWeatherButton(view: EditText) {
+        val enabled = !view.text.isNullOrEmpty() && view.text.length >= MIN_SEARCH_CHARACTER
+        if (enabled) {
+            binding.btnGetWeather.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
+        } else {
+            binding.btnGetWeather.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray))
+        }
+
+        binding.btnGetWeather.isEnabled = enabled
     }
 }
