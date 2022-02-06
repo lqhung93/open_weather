@@ -20,19 +20,20 @@ import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.repository.MainRepository
 import com.hung.openweather.utils.Constants
 import com.hung.openweather.utils.SharedPreferencesManager
+import com.hung.openweather.utils.testing.OpenForTesting
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
+@OpenForTesting
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     val disposable = CompositeDisposable()
 
     val isButtonEnabled = MutableLiveData<Boolean>()
-    val weatherData = MutableLiveData<List<WeatherData>>().apply {
-        value = arrayListOf()
-    }
+    val weatherData = MutableLiveData<List<WeatherData>?>()
     val onGetWeatherState = MutableLiveData<Pair<String, String?>>()
 
     private var editTextValue: String = ""
@@ -44,7 +45,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     fun onGetWeather(view: View) {
         disposable.add(
-            repository.getDailyForecast(editTextValue)
+            getDailyForecast(editTextValue)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableObserver<WeatherResponse>() {
@@ -69,12 +70,16 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         )
     }
 
+    fun getDailyForecast(query: String): Observable<WeatherResponse> {
+        return repository.getDailyForecast(query)
+    }
+
     companion object {
 
         fun builder(context: Context): ViewModelProvider.Factory {
-            val memoryDataSource = MemoryDataSource()
-            val diskDataSource = DiskDataSource(SharedPreferencesManager.getInstance(context))
-            val networkDataSource = NetworkDataSource()
+            val memoryDataSource = MemoryDataSource(context)
+            val diskDataSource = DiskDataSource(context)
+            val networkDataSource = NetworkDataSource(context)
 
             val repository = MainRepository(memoryDataSource, diskDataSource, networkDataSource)
             return MainViewModelFactory(repository)

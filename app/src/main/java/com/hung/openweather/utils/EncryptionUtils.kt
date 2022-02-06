@@ -121,7 +121,7 @@ class EncryptionUtils private constructor(private val context: Context) {
     }
 
     @Throws(Exception::class)
-    fun encrypt(input: ByteArray?, key: Key?): String {
+    private fun encrypt(input: ByteArray?, key: Key?): String {
         val c = Cipher.getInstance(AES_MODE)
         c.init(Cipher.ENCRYPT_MODE, key)
         val encodedBytes = c.doFinal(input)
@@ -129,7 +129,7 @@ class EncryptionUtils private constructor(private val context: Context) {
     }
 
     @Throws(Exception::class)
-    fun decrypt(encrypted: ByteArray?, key: Key?): ByteArray {
+    private fun decrypt(encrypted: ByteArray?, key: Key?): ByteArray {
         val c = Cipher.getInstance(AES_MODE)
         c.init(Cipher.DECRYPT_MODE, key)
         return c.doFinal(encrypted)

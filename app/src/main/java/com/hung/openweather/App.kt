@@ -36,7 +36,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        AppIdUtils.storeAppId(BuildConfig.APP_ID)
+        AppIdUtils.storeAppId(BuildConfig.APP_ID, this)
     }
 
 }
