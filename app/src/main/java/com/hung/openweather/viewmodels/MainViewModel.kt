@@ -50,13 +50,16 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     private val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
     val queryEditTextLiveData = MutableLiveData<String>()
+    val hintEditTextLiveData = MutableLiveData<String>()
 
     val onTouchListener = OnTouchListener { view, motionEvent ->
         if (motionEvent.action == MotionEvent.ACTION_UP) {
             speechRecognizer.stopListening()
+            hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
         }
         if (motionEvent.action == MotionEvent.ACTION_DOWN) {
             speechRecognizer.startListening(speechRecognizerIntent)
+            hintEditTextLiveData.postValue(App.instance.getString(R.string.listening))
         }
         false
     }
@@ -98,6 +101,8 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     }
 
     fun onCreate() {
+        hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
+
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 

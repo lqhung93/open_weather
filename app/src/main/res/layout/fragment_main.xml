@@ -31,7 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:afterTextChanged="@{(text) -> viewModel.onQueryTextChanged(text)}"
-            android:hint="@string/place"
+            android:hint="@{viewModel.hintEditTextLiveData}"
             android:text="@{viewModel.queryEditTextLiveData}"
             app:layout_constraintEnd_toStartOf="@id/btn_speak"
             app:layout_constraintStart_toStartOf="parent"
