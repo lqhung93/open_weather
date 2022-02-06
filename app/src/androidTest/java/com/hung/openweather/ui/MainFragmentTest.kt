@@ -55,6 +55,11 @@ class MainFragmentTest {
         sharedPrefs.edit().clear().commit()
     }
 
+    /**
+     * Given Main Fragment is initialized
+     * When I do nothing
+     * Then edit text hint and button title shows correctly
+     */
     @Test
     fun testFragmentItemName(): Unit = runBlocking {
         launchFragmentInContainer<MainFragment>(themeResId = themResId)
@@ -66,6 +71,11 @@ class MainFragmentTest {
             .check(matches(withSubstring(UiTestUtils.getString(R.string.get_weather))))
     }
 
+    /**
+     * Given Main Fragment is initialized
+     * When I input "saigon" to edit text field and hit get weather button
+     * Then App gets data from API and shows loading view
+     */
     @Test
     fun testLoading(): Unit = runBlocking {
         val emptyResponse = WeatherResponse()
@@ -83,6 +93,11 @@ class MainFragmentTest {
             .check(matches(isDisplayed()))
     }
 
+    /**
+     * Given Main Fragment and API empty response data
+     * When I input "saigon" to edit text field and hit get weather button
+     * Then App shows empty result view
+     */
     @Test
     fun testLoadSuccessfullyWithEmptyData(): Unit = runBlocking {
         val emptyResponse = WeatherResponse()
@@ -114,6 +129,11 @@ class MainFragmentTest {
         )
     }
 
+    /**
+     * Given Main Fragment and weather response data in 7 days
+     * When I input "saigon" to edit text field and hit get weather button
+     * Then App shows recycler view with 7 items
+     */
     @Test
     fun testLoadSuccessfully(): Unit = runBlocking {
         mockWebServer.enqueue(MockResponse().setBody(UiTestUtils.getJsonFromResource(this, "weather_response_success.json")))
@@ -160,6 +180,11 @@ class MainFragmentTest {
             .check(ViewAssertions.doesNotExist())
     }
 
+    /**
+     * Given Main Fragment and API failed response
+     * When I input "saigon" to edit text field and hit get weather button
+     * Then App shows empty result view and Toast with error message
+     */
     @Test
     fun testLoadFailed(): Unit = runBlocking {
         val string = UiTestUtils.getJsonFromResource(this, "weather_response_failed.json")
@@ -198,6 +223,11 @@ class MainFragmentTest {
         )
     }
 
+    /**
+     * Given Main Fragment with succeeded API response
+     * When I re-input "saigon" to edit text field and hit get weather button but receive API failed response
+     * Then App still shows recycler view with 7 items of cached succeeded API response
+     */
     @Test
     fun testLoadFailedButUseCache(): Unit = runBlocking {
         // Load succeeded, save to cache
@@ -238,6 +268,11 @@ class MainFragmentTest {
         )
     }
 
+    /**
+     * Given Main Fragment with succeeded empty API response
+     * When I re-input "saigon" to edit text field and hit get weather button but receive API failed response
+     * Then App shows empty result view and Toast with error message
+     */
     @Test
     fun testLoadFailedButUseEmptyCache(): Unit = runBlocking {
         // Load succeeded but empty, save to cache
