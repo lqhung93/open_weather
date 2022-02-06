@@ -44,6 +44,9 @@ Email: lqhung93@gmail.com
 - Download source code from Github or pull from `master` branch.
 - Open in Android Studio.
 
+## UML Diagram
+![Untitled drawio](https://user-images.githubusercontent.com/7507026/152690996-d8b9adf0-4eda-4820-812d-3149c32b9b01.png)
+
 ## Features
 - The application is a simple Android application which is written byJava/Kotlin.
 - The application is able to retrieve the weather information from Open Weather Maps API.
@@ -55,3 +58,5 @@ must be from 3 characters or above.
 generating a bunch of API requests.
 - The application is able to manage caching mechanism & lifecycle.
 - The application is able to handle failures.
+- The application is able to support the disability to scale large text for who can't see the text clearly.
+- The application is able to support the disability to read out the text using VoiceOver controls.
