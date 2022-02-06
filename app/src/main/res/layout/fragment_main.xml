@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.hung.openweather.viewmodels.MainViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/padding_default_half">
+
+        <Button
+            android:id="@+id/btn_speak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{(view) -> viewModel.onSpeakButtonClicked(view)}"
+            android:text="@string/speak"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_place"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:afterTextChanged="@{(text) -> viewModel.onQueryTextChanged(text)}"
+            android:hint="@{viewModel.hintEditTextLiveData}"
+            android:text="@{viewModel.queryEditTextLiveData}"
+            app:layout_constraintEnd_toStartOf="@id/btn_speak"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_get_weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            bind:enableButton="@{viewModel.isButtonEnabled}"
+            android:onClick="@{(view) -> viewModel.onGetWeather(view)}"
+            android:text="@string/get_weather"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_place" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_get_weather">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_weather_forecast"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                bind:data="@{viewModel.weatherData}"
+                android:visibility="@{viewModel.weatherData.size() > 0 ? View.VISIBLE : View.GONE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_weather" />
+
+            <include
+                android:id="@+id/layout_empty_result"
+                layout="@layout/layout_empty_result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.weatherData.size() > 0 ? View.GONE : View.VISIBLE}" />
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
