@@ -23,18 +23,20 @@ import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
 
+    @get:Rule
     private val themResId = R.style.Theme_MaterialComponents
-    private lateinit var mockWebServer: MockWebServer
+    private val mockWebServer: MockWebServer = MockWebServer()
 
     @Before
     fun setUp() {
-        mockWebServer = MockWebServer()
+        mockWebServer.start(9999)
         ApiManager.BASE_URL = mockWebServer.url("/").toString()
     }
 
@@ -87,8 +89,6 @@ class MainFragmentTest {
                 )
             )
         )
-
-        UiTestUtils.sleep(3000L)
     }
 
     @Test
@@ -135,7 +135,5 @@ class MainFragmentTest {
             .perform(RecyclerViewActions.scrollToPosition<WeatherViewHolder>(7))
         onView(UiTestUtils.withRecyclerView(R.id.rv_weather_forecast).atPosition(7))
             .check(ViewAssertions.doesNotExist())
-
-        UiTestUtils.sleep(3000L)
     }
 }
