@@ -25,7 +25,9 @@ class DiskDataSource(private val context: Context) : DataSource {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            if (!DateUtils.needToRefreshDataFromApi(context) && weatherResponse != null) {
+            if (!DateUtils.needToRefreshDataFromApi(context) &&
+                (weatherResponse != null && !weatherResponse.list.isNullOrEmpty())
+            ) {
                 emitter.onNext(weatherResponse)
             }
             emitter.onComplete()
