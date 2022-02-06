@@ -1,7 +1,9 @@
 package com.hung.openweather.viewmodels
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
@@ -54,13 +56,14 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     val onSpeakButtonClicked = MutableLiveData<View>()
 
     val onSpeakButtonTouchListener = OnTouchListener { view, motionEvent ->
-        if (motionEvent.action == MotionEvent.ACTION_UP) {
-            speechRecognizer.stopListening()
-            hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
-        }
-        if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-            speechRecognizer.startListening(speechRecognizerIntent)
-            hintEditTextLiveData.postValue(App.instance.getString(R.string.listening))
+        if (ContextCompat.checkSelfPermission(App.instance, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                speechRecognizer.stopListening()
+                hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
+            } else if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                speechRecognizer.startListening(speechRecognizerIntent)
+                hintEditTextLiveData.postValue(App.instance.getString(R.string.listening))
+            }
         }
         false
     }
