@@ -11,8 +11,8 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.util.HumanReadables
+import org.hamcrest.CoreMatchers
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
 import java.io.IOException
 import java.nio.charset.Charset
 
@@ -50,7 +50,7 @@ class UiTestUtils {
             private val viewAction: ViewAction
         ) : ViewAction {
             override fun getConstraints(): Matcher<View> {
-                return Matchers.allOf(
+                return CoreMatchers.allOf(
                     arrayListOf(
                         ViewMatchers.isAssignableFrom(RecyclerView::class.java),
                         ViewMatchers.isDisplayed()
@@ -93,7 +93,7 @@ class UiTestUtils {
         private class ScrollToPositionViewAction(private val position: Int) :
             ViewAction {
             override fun getConstraints(): Matcher<View> {
-                return Matchers.allOf(
+                return CoreMatchers.allOf(
                     arrayListOf(
                         ViewMatchers.isAssignableFrom(RecyclerView::class.java),
                         ViewMatchers.isDisplayed()

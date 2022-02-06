@@ -24,8 +24,6 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -203,7 +201,7 @@ class MainFragmentTest {
 
         // Check toast is shown
         onView(withText("HTTP 400 Client Error")).inRoot(
-            withDecorView(not(`is`(activity?.window?.decorView)))
+            withDecorView(CoreMatchers.not(CoreMatchers.`is`(activity?.window?.decorView)))
         ).check(matches(isDisplayed()))
 
         // Check recycler view is empty
@@ -301,7 +299,7 @@ class MainFragmentTest {
 
         // Check toast is shown
         onView(withText("HTTP 400 Client Error")).inRoot(
-            withDecorView(not(`is`(activity?.window?.decorView)))
+            withDecorView(CoreMatchers.not(CoreMatchers.`is`(activity?.window?.decorView)))
         ).check(matches(isDisplayed()))
 
         // Check recycler view is empty
