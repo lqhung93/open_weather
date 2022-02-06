@@ -16,12 +16,24 @@
         android:layout_height="match_parent"
         android:padding="@dimen/padding_default_half">
 
+        <Button
+            android:id="@+id/btn_speak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{(view) -> viewModel.onSpeakButtonClicked(view)}"
+            android:text="@string/speak"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <EditText
             android:id="@+id/et_place"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:afterTextChanged="@{(text) -> viewModel.onQueryTextChanged(text)}"
-            android:hint="@string/place"
+            android:hint="@{viewModel.hintEditTextLiveData}"
+            android:text="@{viewModel.queryEditTextLiveData}"
+            app:layout_constraintEnd_toStartOf="@id/btn_speak"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

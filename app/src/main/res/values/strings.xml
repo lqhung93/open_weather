@@ -9,4 +9,6 @@
     <string name="description">Description: %1$s</string>
     <string name="loading">Loading...</string>
     <string name="empty_result">Empty Result</string>
+    <string name="speak">Speak</string>
+    <string name="listening">Listening...</string>
 </resources>

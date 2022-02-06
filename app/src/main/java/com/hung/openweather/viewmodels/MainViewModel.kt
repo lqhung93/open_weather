@@ -3,6 +3,7 @@ package com.hung.openweather.viewmodels
 import android.content.Context
 import android.text.Editable
 import android.view.View
+import android.view.View.OnTouchListener
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -19,7 +20,6 @@ import com.hung.openweather.models.WeatherData
 import com.hung.openweather.models.WeatherResponse
 import com.hung.openweather.repository.MainRepository
 import com.hung.openweather.utils.Constants
-import com.hung.openweather.utils.SharedPreferencesManager
 import com.hung.openweather.utils.testing.OpenForTesting
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,6 +37,14 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     val onGetWeatherState = MutableLiveData<Pair<String, String?>>()
 
     private var editTextValue: String = ""
+
+    val queryEditTextLiveData = MutableLiveData<String>()
+    val hintEditTextLiveData = MutableLiveData<String>()
+    val onSpeakButtonClicked = MutableLiveData<View>()
+
+    fun onSpeakButtonClicked(view: View) {
+        onSpeakButtonClicked.postValue(view)
+    }
 
     fun onQueryTextChanged(text: Editable?) {
         editTextValue = text.toString()
@@ -72,6 +80,11 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     fun getDailyForecast(query: String): Observable<WeatherResponse> {
         return repository.getDailyForecast(query)
+    }
+
+    override fun onCleared() {
+        disposable.clear()
+        super.onCleared()
     }
 
     companion object {
