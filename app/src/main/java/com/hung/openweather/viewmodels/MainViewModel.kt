@@ -1,15 +1,7 @@
 package com.hung.openweather.viewmodels
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
 import android.text.Editable
-import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.Button
@@ -19,7 +11,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.hung.openweather.App
 import com.hung.openweather.R
 import com.hung.openweather.adapters.WeatherAdapter
 import com.hung.openweather.data.disk.DiskDataSource
@@ -35,7 +26,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 @OpenForTesting
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
@@ -48,25 +38,9 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     private var editTextValue: String = ""
 
-    private val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(App.instance)
-    private val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-
     val queryEditTextLiveData = MutableLiveData<String>()
     val hintEditTextLiveData = MutableLiveData<String>()
     val onSpeakButtonClicked = MutableLiveData<View>()
-
-    val onSpeakButtonTouchListener = OnTouchListener { view, motionEvent ->
-        if (ContextCompat.checkSelfPermission(App.instance, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            if (motionEvent.action == MotionEvent.ACTION_UP) {
-                speechRecognizer.stopListening()
-                hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
-            } else if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                speechRecognizer.startListening(speechRecognizerIntent)
-                hintEditTextLiveData.postValue(App.instance.getString(R.string.listening))
-            }
-        }
-        false
-    }
 
     fun onSpeakButtonClicked(view: View) {
         onSpeakButtonClicked.postValue(view)
@@ -108,55 +82,6 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         return repository.getDailyForecast(query)
     }
 
-    fun onCreate() {
-        hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
-
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        speechRecognizer.setRecognitionListener(object : RecognitionListener {
-            override fun onReadyForSpeech(p0: Bundle?) {
-
-            }
-
-            override fun onBeginningOfSpeech() {
-                queryEditTextLiveData.postValue("")
-            }
-
-            override fun onRmsChanged(p0: Float) {
-
-            }
-
-            override fun onBufferReceived(p0: ByteArray?) {
-
-            }
-
-            override fun onEndOfSpeech() {
-
-
-            }
-
-            override fun onError(p0: Int) {
-
-
-            }
-
-            override fun onResults(bundle: Bundle?) {
-                val data: ArrayList<String>? = bundle?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                queryEditTextLiveData.postValue(data?.get(0) ?: "")
-            }
-
-            override fun onPartialResults(bundle: Bundle?) {
-
-            }
-
-            override fun onEvent(p0: Int, p1: Bundle?) {
-
-            }
-
-        })
-    }
-
     override fun onCleared() {
         disposable.clear()
         super.onCleared()
@@ -192,14 +117,6 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
         fun <T> setRecyclerViewProperties(recyclerView: RecyclerView, items: List<WeatherData>?) {
             if (recyclerView.adapter is WeatherAdapter) {
                 (recyclerView.adapter as WeatherAdapter).setData(items ?: arrayListOf())
-            }
-        }
-
-        @JvmStatic
-        @BindingAdapter("onTouchListener")
-        fun setOnTouchListener(view: View, onTouchListener: OnTouchListener?) {
-            if (onTouchListener != null) {
-                view.setOnTouchListener(onTouchListener)
             }
         }
     }

@@ -2,11 +2,16 @@ package com.hung.openweather.fragments
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -21,6 +26,7 @@ import com.hung.openweather.base.BaseFragment
 import com.hung.openweather.databinding.FragmentMainBinding
 import com.hung.openweather.utils.Constants
 import com.hung.openweather.viewmodels.MainViewModel
+import java.util.*
 
 class MainFragment : BaseFragment() {
 
@@ -32,6 +38,9 @@ class MainFragment : BaseFragment() {
     private var recyclerViewState: Parcelable? = null
     private var progressDialog: AlertDialog? = null
 
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private lateinit var speechRecognizerIntent: Intent
+
     companion object {
         private const val RECYCLER_VIEW_STATE = "RECYCLER_VIEW_STATE"
         private const val RECORD_AUDIO_REQUEST_CODE = 12345
@@ -40,7 +49,6 @@ class MainFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this, MainViewModel.builder(requireContext())).get(MainViewModel::class.java)
-        mainViewModel.onCreate()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,6 +61,8 @@ class MainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initVoiceRecognition()
 
         initLoadingView()
 
@@ -128,5 +138,70 @@ class MainFragment : BaseFragment() {
         } else {
             progressDialog?.dismiss()
         }
+    }
+
+    private fun initVoiceRecognition() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
+        speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(p0: Bundle?) {
+
+            }
+
+            override fun onBeginningOfSpeech() {
+                mainViewModel.queryEditTextLiveData.postValue("")
+            }
+
+            override fun onRmsChanged(p0: Float) {
+
+            }
+
+            override fun onBufferReceived(p0: ByteArray?) {
+
+            }
+
+            override fun onEndOfSpeech() {
+
+
+            }
+
+            override fun onError(p0: Int) {
+
+
+            }
+
+            override fun onResults(bundle: Bundle?) {
+                val data: ArrayList<String>? = bundle?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                mainViewModel.queryEditTextLiveData.postValue(data?.get(0) ?: "")
+            }
+
+            override fun onPartialResults(bundle: Bundle?) {
+
+            }
+
+            override fun onEvent(p0: Int, p1: Bundle?) {
+
+            }
+
+        })
+
+        binding.btnSpeak.setOnTouchListener { view, motionEvent ->
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                if (motionEvent.action == MotionEvent.ACTION_UP) {
+                    speechRecognizer.stopListening()
+                    mainViewModel.hintEditTextLiveData.postValue(getString(R.string.place))
+                } else if (motionEvent.action == MotionEvent.ACTION_DOWN) {
+                    speechRecognizer.startListening(speechRecognizerIntent)
+                    mainViewModel.hintEditTextLiveData.postValue(getString(R.string.listening))
+                }
+            }
+            false
+        }
+
+        mainViewModel.hintEditTextLiveData.postValue(getString(R.string.place))
     }
 }
