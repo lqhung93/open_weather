@@ -17,11 +17,21 @@ class MainViewModelTest {
     private val mainRepository = PowerMockito.mock(MainRepository::class.java)
     private val mainViewModel = PowerMockito.spy(MainViewModel(mainRepository))
 
+    /**
+     * Given nothing
+     * When calling getDailyForecast in MainViewModel
+     * Then nothing is called
+     */
     @Test
     fun testNull() {
         Mockito.verify(mainViewModel, Mockito.never()).getDailyForecast("saigon")
     }
 
+    /**
+     * Given MainRepository
+     * When calling getDailyForecast in MainViewModel
+     * Then getDailyForecast in MainRepository must be called
+     */
     @Test
     fun testGetDailyForecast() {
         val failure = TestUtils.getJsonFromResource(this, "weather_response_success.json")

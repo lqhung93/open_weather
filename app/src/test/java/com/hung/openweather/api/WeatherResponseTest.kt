@@ -12,6 +12,11 @@ import org.junit.runners.JUnit4
 @RunWith(JUnit4::class)
 class WeatherResponseTest {
 
+    /**
+     * Given failed json response
+     * When parsing data from it to object
+     * Then the properties in object are the same with response
+     */
     @Test
     fun failure() {
         val failure = TestUtils.getJsonFromResource(this, "weather_response_failed.json")
@@ -19,6 +24,11 @@ class WeatherResponseTest {
         Assert.assertEquals("400", jsonObject.getString("cod"))
     }
 
+    /**
+     * Given succeeded json response
+     * When parsing data from it to object
+     * Then the properties in object are the same with response
+     */
     @Test
     fun success() {
         val failure = TestUtils.getJsonFromResource(this, "weather_response_success.json")

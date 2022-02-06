@@ -8,10 +8,7 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.CoreMatchers
 import org.json.JSONObject
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import retrofit2.Retrofit
@@ -21,12 +18,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 @RunWith(JUnit4::class)
 class WeatherServiceTest {
 
+    @get:Rule
     private lateinit var service: WeatherService
-    private lateinit var mockWebServer: MockWebServer
+    private val mockWebServer = MockWebServer()
 
     @Before
     fun createService() {
-        mockWebServer = MockWebServer()
+        mockWebServer.start(9999)
         service = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
             .addConverterFactory(GsonConverterFactory.create())
@@ -40,6 +38,11 @@ class WeatherServiceTest {
         mockWebServer.shutdown()
     }
 
+    /**
+     * Given succeeded json response from mock server
+     * When calling getDailyForecast API
+     * Then onNext must be called with value is the same with json string
+     */
     @Test
     fun getWeatherSucceeded() {
         val string = TestUtils.getJsonFromResource(this, "weather_response_success.json")
@@ -68,6 +71,11 @@ class WeatherServiceTest {
         Assert.assertThat(request.path, CoreMatchers.`is`("/forecast/daily?appid=123&q=saigon&cnt=7&units=metric"))
     }
 
+    /**
+     * Given failed json response from mock server
+     * When calling getDailyForecast API
+     * Then onError must be called
+     */
     @Test
     fun getWeatherFailed() {
         val string = TestUtils.getJsonFromResource(this, "weather_response_failed.json")

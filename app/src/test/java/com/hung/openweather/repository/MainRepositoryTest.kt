@@ -21,11 +21,21 @@ class MainRepositoryTest {
     private val networkDataSource = PowerMockito.mock(NetworkDataSource::class.java)
     private val mainRepository = PowerMockito.spy(MainRepository(memoryDataSource, diskDataSource, networkDataSource))
 
+    /**
+     * Given nothing
+     * When calling getDailyForecast in MainRepository
+     * Then nothing is called
+     */
     @Test
     fun testNull() {
         Mockito.verify(mainRepository, Mockito.never()).getDailyForecast("saigon")
     }
 
+    /**
+     * Given MemoryDataSource, DiskDataSource, NetworkDataSource
+     * When calling getDailyForecast in MainRepository
+     * Then getDailyForecast in MemoryDataSource, DiskDataSource, NetworkDataSource must be called
+     */
     @Test
     fun testGetDailyForecast() {
         val failure = TestUtils.getJsonFromResource(this, "weather_response_success.json")
