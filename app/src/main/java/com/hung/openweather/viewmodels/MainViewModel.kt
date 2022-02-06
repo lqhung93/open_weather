@@ -52,7 +52,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     val queryEditTextLiveData = MutableLiveData<String>()
     val hintEditTextLiveData = MutableLiveData<String>()
 
-    val onTouchListener = OnTouchListener { view, motionEvent ->
+    val onSpeakButtonTouchListener = OnTouchListener { view, motionEvent ->
         if (motionEvent.action == MotionEvent.ACTION_UP) {
             speechRecognizer.stopListening()
             hintEditTextLiveData.postValue(App.instance.getString(R.string.place))
