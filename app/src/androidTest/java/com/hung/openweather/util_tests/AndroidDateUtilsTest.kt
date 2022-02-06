@@ -35,7 +35,7 @@ class AndroidDateUtilsTest {
 
     /**
      * Given the application
-     * When API is called
+     * When API is called in 2 hours
      * Then deny to call API
      */
     @Test
