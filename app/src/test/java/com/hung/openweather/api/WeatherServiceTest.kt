@@ -71,8 +71,7 @@ class WeatherServiceTest {
     @Test
     fun getWeatherFailed() {
         val string = TestUtils.getJsonFromResource(this, "weather_response_failed.json")
-        mockWebServer.enqueue(MockResponse().setBody(string))
-        mockWebServer.enqueue(MockResponse().setHttp2ErrorCode(400))
+        mockWebServer.enqueue(MockResponse().setResponseCode(400).setBody(string))
 
         service.getDailyForecast("123", "saigon", "7", "metric")
             .subscribeWith(object : DisposableObserver<WeatherResponse>() {
@@ -86,7 +85,7 @@ class WeatherServiceTest {
                 }
 
                 override fun onError(e: Throwable) {
-                    Assert.assertThat(e.localizedMessage, CoreMatchers.`is`(400))
+                    Assert.assertThat(e.localizedMessage, CoreMatchers.`is`("HTTP 400 Client Error"))
                 }
             })
 
