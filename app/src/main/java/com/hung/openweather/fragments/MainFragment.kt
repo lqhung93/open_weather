@@ -1,12 +1,17 @@
 package com.hung.openweather.fragments
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -29,6 +34,7 @@ class MainFragment : BaseFragment() {
 
     companion object {
         private const val RECYCLER_VIEW_STATE = "RECYCLER_VIEW_STATE"
+        private const val RECORD_AUDIO_REQUEST_CODE = 12345
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +74,23 @@ class MainFragment : BaseFragment() {
                 }
             }
         })
+
+        mainViewModel.onSpeakButtonClicked.observe(viewLifecycleOwner, Observer {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+                requestRecordAudioPermission();
+            }
+        })
+    }
+
+    private fun requestRecordAudioPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                RECORD_AUDIO_REQUEST_CODE
+            )
+        }
     }
 
     override fun onResume() {

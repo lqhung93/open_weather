@@ -51,6 +51,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     val queryEditTextLiveData = MutableLiveData<String>()
     val hintEditTextLiveData = MutableLiveData<String>()
+    val onSpeakButtonClicked = MutableLiveData<View>()
 
     val onSpeakButtonTouchListener = OnTouchListener { view, motionEvent ->
         if (motionEvent.action == MotionEvent.ACTION_UP) {
@@ -62,6 +63,10 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
             hintEditTextLiveData.postValue(App.instance.getString(R.string.listening))
         }
         false
+    }
+
+    fun onSpeakButtonClicked(view: View) {
+        onSpeakButtonClicked.postValue(view)
     }
 
     fun onQueryTextChanged(text: Editable?) {
