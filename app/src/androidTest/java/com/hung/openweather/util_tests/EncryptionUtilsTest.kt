@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 class EncryptionUtilsTest {
 
     @get:Rule
-    private val instrumentationContext = InstrumentationRegistry.getInstrumentation().context
+    private val instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
 
     /**
      * Given data

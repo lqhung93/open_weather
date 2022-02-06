@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 class AppIdUtilsTest {
 
     @get:Rule
-    private val instrumentationContext = InstrumentationRegistry.getInstrumentation().context
+    private val instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
 
     /**
      * Given app Id value
