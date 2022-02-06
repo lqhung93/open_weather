@@ -1,7 +1,8 @@
-package com.hung.openweather.utils
+package com.hung.openweather.util_tests
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.hung.openweather.utils.SharedPreferencesManager
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
