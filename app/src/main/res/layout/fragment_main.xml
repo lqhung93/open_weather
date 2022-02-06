@@ -49,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 bind:data="@{viewModel.weatherData}"
+                android:visibility="@{viewModel.weatherData.size() > 0 ? View.VISIBLE : View.GONE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/list_item_weather" />
 
